@@ -39,7 +39,7 @@ for func_no = funcs
     allerrorvals = zeros(progress, Runs);
 %     you can use parfor if you have MATLAB Parallel Computing Toolbox
 %     parfor run_id = 1 : Runs
-    for run_id = 1 : Runs
+    parfor run_id = 1 : Runs
         g_iter=0;
         
         rand_ind = problem_size*func_no*Runs+run_id-Runs;
