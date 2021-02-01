@@ -7,7 +7,6 @@ fhd=@cec17_func;
 NP = 100;
 
 func=[1:30];
-optimum=100*func;
 
 
 % for i=1:29
@@ -31,5 +30,5 @@ for D= [10 30 50 100]
             disp('Error..')
     end
     fprintf('\n-------------------------------------------------------\n\n')
-    jmo(Runs,fhd,D,func,max_nfes,NP,optimum);
+    jmo(Runs,fhd,D,func,max_nfes,NP);
 end

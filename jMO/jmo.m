@@ -1,4 +1,4 @@
-function jmo(Runs,fhd,problem_size,funcs,max_nfes,pop_size,optimum)
+function jmo(Runs,fhd,problem_size,funcs,max_nfes,pop_size)
 
 % Rand_Seeds=load('input_data/Rand_Seeds.txt');
 rand('seed', sum(100 * clock));
@@ -33,6 +33,7 @@ progress = numel(RecordFEsFactor);
 val_2_reach = 10^(-8);
 
 for func_no = funcs
+    optimum=100*func_no;
     fprintf('\n-------------------------------------------------------\n')
     fprintf('Function = %d, Dimension size = %d\n', func_no, problem_size)
     allerrorvals = zeros(progress, Runs);
@@ -314,23 +315,18 @@ for func_no = funcs
             end
         end
         
-%         if(C(1)==1)
-%             run_funcvals=run_funcvals-optimum(func_no);
-%         end
-%         run_funcvals=run_funcvals-optimum(func_no);
-        
-        run_funcvals(run_funcvals<val_2_reach)=0;
-        
-        fprintf('%d th run, best-so-far error value = %1.8e\n', run_id , run_funcvals(end))
+        fprintf('%d th run, best-so-far error value = %1.8e\n', run_id , run_funcvals(end)-optimum)
         
         errorVals= [];
         for w = 1 : progress
-            bestold = run_funcvals(RecordFEsFactor(w) * max_nfes) - optimum(func_no);
+            bestold = run_funcvals(RecordFEsFactor(w) * max_nfes) - optimum;
             errorVals(w)= abs(bestold);
         end
         allerrorvals(:, run_id) = errorVals;
         
     end %% end 1 run
+    
+    allerrorvals(allerrorvals < val_2_reach) = 0;
     
     [~, sorted_index] = sort(allerrorvals(end,:), 'ascend');
     allerrorvals = allerrorvals(:, sorted_index);
