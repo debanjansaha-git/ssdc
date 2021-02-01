@@ -165,7 +165,7 @@ for func_no = funcs
                 sf = min(sf,0.7);
             end
 
-            r0 = [1 : pop_size];
+            r0 = 1 : pop_size;
             popAll = [pop; archive.pop];
             [r1, r2] = gnR1R2(pop_size, size(popAll, 1), r0);
             
@@ -191,16 +191,15 @@ for func_no = funcs
             else
                 sfw = 1.2 * sf;
             end
+            
+            vi = pop;
             % DE/current-to-p-best/1
-            vi(de_1==1, :) = pop(de_1==1, :) + ...
-                sfw(de_1==1, ones(1, problem_size)) .* ...
-                (pbest(de_1==1, :) - pop(de_1==1, :)) + ...
-                sf(de_1==1, ones(1, problem_size)).*...
-                (pop(r1(de_1==1, :), :) - popAll(r2(de_1==1), :));
+            temp = pop + sfw(:, ones(1, problem_size)) .* (pbest - pop(r1, :)) + ...
+                sfw(:, ones(1, problem_size)).* (pop(r1, :) - popAll(r2, :));
+            vi(de_1==1, :) = temp(de_1==1, :);
             % DE/rand-to-p-best/1
-            vi(de_2==1, :) = sf(de_2==1, ones(1, problem_size)) .* ...
-                  (pop(r1(de_2==1), :) + ...
-                  (pbest(de_2==1, :) - popAll(r2(de_2==1), :)));
+            temp = pop(r1, :) + sfw(:, ones(1, problem_size)) .* ((pbest - popAll(r2, :)));
+            vi(de_2==1, :) = temp(de_2==1, :);
             
             vi = boundConstraint(vi, pop, lu);
             
